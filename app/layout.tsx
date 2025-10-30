@@ -32,6 +32,9 @@ export const metadata: Metadata = {
     "Education Technology",
     "Learning Management System",
   ],
+  metadataBase: new URL(
+    "https://edu-chain-fit-1045-high-distinction.vercel.app"
+  ),
   openGraph: {
     title: "EduChain",
     description: "EduChain - Empowering Education through Blockchain",
@@ -39,14 +42,20 @@ export const metadata: Metadata = {
     siteName: "EduChain",
     images: [
       {
-        url: "https://edu-chain-fit-1045-high-distinction.vercel.app/Educhain.png",
+        url: "https://edu-chain-fit-1045-high-distinction.vercel.app/logo.png",
         width: 1200,
         height: 630,
         alt: "EduChain Open Graph Image",
       },
     ],
-    locale: "en_UK",
+    locale: "en_GB",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EduChain",
+    description: "EduChain - Empowering Education through Blockchain",
+    images: ["https://edu-chain-fit-1045-high-distinction.vercel.app/logo.png"],
   },
 };
 
