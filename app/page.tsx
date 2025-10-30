@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-linear-to-b from-[#07163a] via-[#07224a] to-[#042b57] text-slate-100 antialiased">
@@ -73,12 +74,16 @@ struct Certificate has key {
               </pre>
 
               <div className="mt-6 flex gap-3">
-                <button className="flex-1 rounded-md bg-[#06b6d4] py-2 font-semibold">
-                  View Code
-                </button>
-                <button className="flex-1 rounded-md border border-white/8 bg-transparent py-2">
-                  Docs
-                </button>
+                <Link
+                  href={
+                    "https://github.com/DoneWithWork/EduChain-FIT_1045-HighDistinction/blob/master/contracts/sources/cert.move"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 rounded-md bg-[#06b6d4] py-2 font-semibold text-center"
+                >
+                  <span>View Code</span>
+                </Link>
               </div>
             </div>
           </motion.div>
@@ -141,7 +146,7 @@ struct Certificate has key {
                 <li>• Built on SUI blockchain</li>
                 <li>• MOVE-based smart contracts</li>
                 <li>• Next.js + TypeScript frontend</li>
-                <li>• Zero-Knowledge login (coming soon)</li>
+                <li>• Zero-Knowledge login</li>
               </ul>
             </div>
           </div>
@@ -159,13 +164,17 @@ struct Certificate has key {
               secure. Users control their own data with privacy-preserving
               authentication.
             </p>
-            <div className="mt-6 flex gap-3">
-              <button className="rounded-md bg-[#06b6d4] px-5 py-2 font-semibold">
+            <div className="mt-6 flex flex-col items-center">
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md bg-[#06b6d4] px-5 py-2 font-semibold"
+                href={
+                  "https://suiscan.xyz/testnet/object/0xb983c737cf45cd655bcc73e9f6e0de87328001060de16262467d99098fedf07e/tx-blocks"
+                }
+              >
                 View Smart Contract
-              </button>
-              <button className="rounded-md border border-white/10 px-5 py-2">
-                Privacy Details
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -177,7 +186,7 @@ struct Certificate has key {
                   Tx: <span className="font-mono text-xs">0x9f3...a4d</span>
                 </div>
                 <div className="rounded p-3 bg-white/4">
-                  Status: <strong>Verified</strong>
+                  Status: <strong>Active</strong>
                 </div>
               </div>
             </div>

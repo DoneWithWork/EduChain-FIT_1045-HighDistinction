@@ -19,6 +19,35 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "EduChain",
   description: "EduChain - Empowering Education through Blockchain",
+  category: "education",
+  keywords: [
+    "EduChain",
+    "Education",
+    "Blockchain",
+    "Decentralized Learning",
+    "Digital Credentials",
+    "Smart Contracts",
+    "E-Learning",
+    "Online Education",
+    "Education Technology",
+    "Learning Management System",
+  ],
+  openGraph: {
+    title: "EduChain",
+    description: "EduChain - Empowering Education through Blockchain",
+    url: "https://edu-chain-fit-1045-high-distinction.vercel.app",
+    siteName: "EduChain",
+    images: [
+      {
+        url: "https://edu-chain-fit-1045-high-distinction.vercel.app/Educhain.png",
+        width: 1200,
+        height: 630,
+        alt: "EduChain Open Graph Image",
+      },
+    ],
+    locale: "en_UK",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

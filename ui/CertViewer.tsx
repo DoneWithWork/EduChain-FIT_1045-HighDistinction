@@ -1,6 +1,7 @@
 "use client";
 
 import GetCertViewerAction from "@/app/actions/getCertViewer";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { certificates, courses, users } from "@/db/schema";
 import { StarIcon, WorkflowIcon } from "lucide-react";
@@ -98,43 +99,44 @@ function TimeLine({ certs }: { certs: CertsWithCourseAndIssuer[] }) {
   return (
     <VerticalTimeline>
       {certs.map((cert, index) => {
-        if (!cert.revoked) {
-          return (
-            <VerticalTimelineElement
-              key={index}
-              className="vertical-timeline-element--work"
-              contentStyle={{
-                background:
-                  institutionColors[cert.issuer.institutionName!] || "#fff",
-                color: "#fff",
-              }}
-              contentArrowStyle={{
-                borderRight: `7px solid ${
-                  institutionColors[cert.issuer.institutionName!] || "#fff"
-                }`,
-              }}
-              date={new Date(cert.createdAt).toLocaleDateString()}
-              iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
-              icon={<WorkflowIcon />}
-            >
+        return (
+          <VerticalTimelineElement
+            key={index}
+            className="vertical-timeline-element--work"
+            contentStyle={{
+              background:
+                institutionColors[cert.issuer.institutionName!] || "#fff",
+              color: "#fff",
+            }}
+            contentArrowStyle={{
+              borderRight: `7px solid ${
+                institutionColors[cert.issuer.institutionName!] || "#fff"
+              }`,
+            }}
+            date={new Date(cert.createdAt).toLocaleDateString()}
+            iconStyle={{ background: "rgb(33, 150, 243)", color: "#fff" }}
+            icon={<WorkflowIcon />}
+          >
+            <div className="flex flex-row items-center justify-between">
               <h3 className="vertical-timeline-element-title text-xl font-bold">
                 {cert.courses.courseName}
               </h3>
-              <h4 className="vertical-timeline-element-subtitle">
-                Issued by:{" "}
-                <span className="font-bold">
-                  {cert.issuer.institutionName!}
-                </span>
-              </h4>
-              <Link
-                href={`https://suiscan.xyz/testnet/tx/${cert.certAddress}`}
-                className="inline-block mt-3 text-sm underline underline-offset-2 text-blue-200 hover:text-blue-100"
-              >
-                View on-chain ↗
-              </Link>
-            </VerticalTimelineElement>
-          );
-        }
+              <Badge className="bg-red-500 text-white font-bold text-sm">
+                {cert.revoked === 1 ? "Revoked" : "Active"}
+              </Badge>
+            </div>
+            <h4 className="vertical-timeline-element-subtitle">
+              Issued by:{" "}
+              <span className="font-bold">{cert.issuer.institutionName!}</span>
+            </h4>
+            <Link
+              href={`https://suiscan.xyz/testnet/tx/${cert.certAddress}`}
+              className="inline-block mt-3 text-sm underline underline-offset-2 text-blue-200 hover:text-blue-100"
+            >
+              View on-chain ↗
+            </Link>
+          </VerticalTimelineElement>
+        );
       })}
       <VerticalTimelineElement
         iconStyle={{ background: "rgb(16, 204, 82)", color: "#fff" }}

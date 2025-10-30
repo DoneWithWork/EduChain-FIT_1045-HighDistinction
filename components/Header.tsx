@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 export default function Header() {
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
+      <Link href={"/"} className="flex items-center gap-4">
         <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur p-2 flex items-center justify-center">
           <svg
             width="28"
@@ -30,7 +30,7 @@ export default function Header() {
             Decentralised Certificate Verification
           </p>
         </div>
-      </div>
+      </Link>
 
       <nav className="hidden md:flex gap-6 items-center text-sm text-slate-200">
         <Link className="hover:underline" href="/pricing">
@@ -39,15 +39,7 @@ export default function Header() {
         <Link className="hover:underline" href="/cert-viewer">
           Cert Viewer
         </Link>
-        <Link className="hover:underline" href="#how">
-          How It Works
-        </Link>
-        <Link className="hover:underline" href="#features">
-          Features
-        </Link>
-        <Link className="hover:underline" href="#security">
-          Security
-        </Link>
+
         <Button
           onClick={() => (window.location.href = "/auth")}
           className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
