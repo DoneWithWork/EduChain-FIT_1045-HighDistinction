@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1760347956614,
+      "tag": "0000_tired_senator_kelly",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1760506344657,
+      "tag": "0001_wealthy_proteus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1761029126913,
+      "tag": "0002_violet_wolfpack",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1761115414975,
+      "tag": "0003_mute_adam_warlock",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1761291380604,
+      "tag": "0004_young_oracle",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1761299948770,
+      "tag": "0005_polite_justin_hammer",
+      "breakpoints": true
+    }
+  ]
+}

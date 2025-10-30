@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - esbuild
+  - react-vertical-timeline-component
+  - sharp
+  - unrs-resolver
