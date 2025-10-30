@@ -11,7 +11,9 @@ export default async function DashboardLayout({
       <div>
         <IssuerSidebar />
       </div>
-      <div className="dark:bg-blue-900 px-3 py-3 flex-1">{children}</div>
+      <div className="dark:bg-blue-900  flex-1 max-h-screen  p-5">
+        {children}
+      </div>
     </div>
   );
 }

@@ -1,8 +1,4 @@
-import { db } from "@/db/db";
-import { courses } from "@/db/schema";
-import { sessionManager } from "@/lib/auth";
-import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -10,9 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { getSingleCourseIssuer } from "@/data";
+import { sessionManager } from "@/lib/auth";
+import { DataTable } from "@/ui/tables/data-table";
+import { CertColumns } from "@/ui/tables/Issuer/columns";
 import Image from "next/image";
-import React from "react";
+import { redirect } from "next/navigation";
 
 export default async function SingleCourse({
   params,
@@ -22,15 +21,12 @@ export default async function SingleCourse({
   const { id } = await params;
 
   // Fetch course
-  const course = await db.query.courses.findFirst({
-    where: eq(courses.id, Number(id)),
-  });
-
+  const course = await getSingleCourseIssuer(Number(id));
+  console.log("Course", course);
   // Auth
   const user = await sessionManager.getUser();
   if (!user) return redirect("/auth");
   if (course?.issuerId !== user.id) return redirect("/dashboard/issuer");
-  console.log(course);
   if (!course) {
     return (
       <div className="flex justify-center items-center h-[70vh]">
@@ -48,8 +44,8 @@ export default async function SingleCourse({
   }
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      <Card className="max-w-3xl mx-auto shadow-lg rounded-2xl">
+    <div className="container mx-auto py-10 px-4 h-full overflow-auto">
+      <Card className="max-w-5xl mx-auto shadow-lg rounded-2xl">
         <CardHeader className="flex flex-col gap-4">
           {course.courseImageUrl && (
             <div className="relative w-full h-64 overflow-hidden rounded-xl">
@@ -98,6 +94,7 @@ export default async function SingleCourse({
           <section className="text-sm text-muted-foreground">
             <p>Last updated: {new Date(course.updatedAt).toLocaleString()}</p>
           </section>
+          <DataTable columns={CertColumns} data={course.certificates ?? []} />
         </CardContent>
       </Card>
     </div>

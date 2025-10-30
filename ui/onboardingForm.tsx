@@ -30,6 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useActionState } from "react";
+import { deleteCookie, getCookie } from "cookies-next/client";
 
 export default function NewOnboardingForm() {
   const router = useRouter();
@@ -112,6 +113,16 @@ export default function NewOnboardingForm() {
   }
   useEffect(() => {
     if (formState.success) {
+      const intendedPlan = getCookie("intended_plan");
+      if (intendedPlan) {
+        deleteCookie("intended_plan");
+        if (intendedPlan === "pro") {
+          router.push(`${process.env.NEXT_PUBLIC_STRIPE_PRO_PLAN}`);
+        } else if (intendedPlan === "power") {
+          router.push(`${process.env.NEXT_PUBLIC_STRIPE_POWER_PLAN}`);
+        }
+        return;
+      }
       toast.success("User onboarding successful!");
       router.push(`/dashboard/${formState.role}`);
     }

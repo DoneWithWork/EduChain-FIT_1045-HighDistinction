@@ -16,10 +16,29 @@ export const users = sqliteTable('users', {
     institutionName: text('institution_name'),
     studentId: text('student_id'),
     onBoardingCompleted: integer('onboarding_completed').notNull().default(0),
+    stripeCustomerId: text('stripe_customer_id').unique(),
     createdAt: text('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text('updated_at').notNull().default(sql`CURRENT_TIMESTAMP`),
     deletedAt: text('deleted_at'),
 });
+export const subscription = sqliteTable('subscriptions', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: integer('user_id')
+        .notNull()
+        .references(() => users.id, { onDelete: 'cascade' }),
+    plan: text('plan', { enum: ['free', 'pro', 'power'] }).notNull().default('free'),
+    stripeSubscriptionId: text('stripe_subscription_id').notNull().unique(),
+    status: text('status').notNull(),
+    currentPeriodEnd: integer('current_period_end', { mode: 'timestamp' }).notNull(),
+    createdAt: text('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text('updated_at').notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+export const subscriptionRelations = relations(subscription, ({ one }) => ({
+    user: one(users, {
+        fields: [subscription.userId],
+        references: [users.id],
+    }),
+}));
 
 // === courses ===
 export const courses = sqliteTable('courses', {
@@ -50,6 +69,7 @@ export const certificates = sqliteTable('certificates', {
         .references(() => courses.id, { onDelete: 'cascade' }),
     studentEmail: text('student_email').notNull(),
     certAddress: text('cert_address').unique(),
+    objectId: text('object_id').default(""),
     createdAt: text('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text('updated_at').notNull().default(sql`CURRENT_TIMESTAMP`),
     revoked: integer('revoked').notNull().default(0),
@@ -94,10 +114,13 @@ export const issuer = sqliteTable('issuer', {
 });
 
 
-export const userRelations = relations(users, ({ many }) => ({
+export const userRelations = relations(users, ({ one, many }) => ({
     sessions: many(sessions),
+    subscription: one(subscription, {
+        fields: [users.id],
+        references: [subscription.userId],
+    }),
 }));
-
 // Each session belongs to one user
 export const sessionRelations = relations(sessions, ({ one }) => ({
     user: one(users, {

@@ -9,6 +9,7 @@ import z from "zod";
 const mintCertSchema = z.object({
     digest: z.string(),
     certId: z.number(),
+    objectId: z.string(),
 })
 export async function MintCertAction(prevState: unknown, data: z.infer<typeof mintCertSchema>) {
     try {
@@ -21,7 +22,7 @@ export async function MintCertAction(prevState: unknown, data: z.infer<typeof mi
         const user = await sessionClient.getUser();
 
         if (!user) throw new Error("Not authenticated");
-        const { digest, certId } = parsed.data;
+        const { digest, certId, objectId } = parsed.data;
         const certificate = await db.query.certificates.findFirst({
             where: and(eq(certificates.id, certId), eq(certificates.studentId, user.id!))
         })
@@ -29,9 +30,9 @@ export async function MintCertAction(prevState: unknown, data: z.infer<typeof mi
 
         await db.update(certificates).set({
             certAddress: digest,
+            createdAt: new Date().toISOString(),
+            objectId,
         }).where(eq(certificates.id, certId));
-
-
         return { success: true };
     } catch (err) {
         console.error("Error in MintCertAction:", err);

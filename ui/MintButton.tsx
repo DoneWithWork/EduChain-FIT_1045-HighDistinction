@@ -90,7 +90,6 @@ export default function MintButton({
       //   userSignature: userSignedTx.signature,
       // });
 
-      // Execute with both signatures
       const result = await suiClient.executeTransactionBlock({
         transactionBlock: userSignedTx.bytes,
         signature: [sponsorSignature],
@@ -100,9 +99,24 @@ export default function MintButton({
           showObjectChanges: true,
         },
       });
+      const txResult = await suiClient.waitForTransaction({
+        digest: result.digest,
+        options: { showEffects: true, showEvents: true },
+      });
+      if (txResult.effects?.status.status !== "success")
+        throw new Error(txResult.effects?.status.error || "Transaction failed");
+      const created = txResult.effects?.created?.find(
+        (obj) =>
+          typeof obj.owner === "object" &&
+          "AddressOwner" in obj.owner &&
+          obj.owner.AddressOwner === zkCredentials.address!
+      );
+      const objectId = created?.reference?.objectId;
+      if (!objectId) throw new Error("Failed to retrieve minted object ID");
+      console.log("Object ID:", objectId);
       console.log("Mint transaction result:", result.digest);
       startTransition(async () => {
-        await dispatch({ digest: result.digest, certId });
+        await dispatch({ digest: result.digest, certId, objectId });
       });
     } catch (err) {
       console.error("Minting failed:", err);

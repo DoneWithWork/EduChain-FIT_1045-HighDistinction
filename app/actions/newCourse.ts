@@ -1,11 +1,12 @@
 "use server"
 
 import { db } from "@/db/db";
-import { certificates, courses, users } from "@/db/schema";
+import { certificates, courses, subscription, users } from "@/db/schema";
 import { sessionManager } from "@/lib/auth";
 import { pinata } from "@/lib/pinata";
+import { plans } from "@/lib/stripe";
 import { courseSchema } from "@/lib/validation";
-import { inArray } from "drizzle-orm";
+import { count, eq, inArray } from "drizzle-orm";
 import { updateTag } from "next/cache";
 import * as z from "zod";
 export async function NewCourseAction(prevState: unknown, data: z.infer<typeof courseSchema>) {
@@ -16,13 +17,30 @@ export async function NewCourseAction(prevState: unknown, data: z.infer<typeof c
         if (!user) throw new Error("Not authenticated");
 
         if (user.role !== "issuer") throw new Error("Not authorized");
+        const sub = await db.query.subscription.findFirst({
+            where: eq(subscription?.userId, user.id)
+        })
+        if (!sub) {
+            throw new Error("No active subscription");
+        }
+        const userCoursesCount = await db.select({ count: count() }).from(courses).where(eq(courses.issuerId, user.id));
+        const courseCount = userCoursesCount[0].count;
+        const plan = plans.find(p => p.plan === sub.plan);
+        if (!plan) throw new Error("Invalid plan");
+        if (plan?.maxCourses <= courseCount) {
+            throw new Error("Course limit reached for your plan. Please upgrade your plan to create more courses.");
+        }
+
         const parsed = courseSchema.safeParse(data);
         if (!parsed.success) {
             console.error(parsed.error);
             return { success: false, error: parsed.error.flatten };
         }
-        console.log(parsed);
-        console.log(data);
+        const { courseName, courseDescription, studentEmails } = parsed.data;
+        if (studentEmails.length > plan.maxCertsPerCourse) {
+            throw new Error(`You can issue up to ${plan.maxCertsPerCourse} certificates per course on your current plan. Please upgrade your plan to issue more certificates.`);
+        }
+
 
         const certImage = parsed.data.courseImageUrl;
 
@@ -31,7 +49,6 @@ export async function NewCourseAction(prevState: unknown, data: z.infer<typeof c
 
         console.log("File uploaded to IPFS:", url);
 
-        const { courseName, courseDescription, studentEmails } = parsed.data;
         const newCourse = await db.insert(courses).values({
             courseName,
             courseDescription,
@@ -40,7 +57,6 @@ export async function NewCourseAction(prevState: unknown, data: z.infer<typeof c
             issuerId: user.id!,
         })
 
-        // Check if any existing users match the student emails and create certificates for them in advance
         const emailList = studentEmails;
         const existingStudents = await db.select().from(users).where(
             inArray(users.email, emailList)

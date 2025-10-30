@@ -8,6 +8,7 @@ import {
   getExtendedEphemeralPublicKey,
   jwtToAddress,
 } from "@mysten/sui/zklogin";
+import { deleteCookie, getCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -101,6 +102,16 @@ export default function GoogleAuthPage() {
         setStatus("Verification successful! Redirecting...");
         setTimeout(() => {
           if (creationData.onBoardingCompleted) {
+            const intendedPlan = getCookie("intended_plan");
+            if (intendedPlan) {
+              deleteCookie("intended_plan");
+              if (intendedPlan === "pro") {
+                router.push(`${process.env.NEXT_PUBLIC_STRIPE_PRO_PLAN}`);
+              } else if (intendedPlan === "power") {
+                router.push(`${process.env.NEXT_PUBLIC_STRIPE_POWER_PLAN}`);
+              }
+              return;
+            }
             router.push(
               creationData.role === "student"
                 ? "/dashboard/student"

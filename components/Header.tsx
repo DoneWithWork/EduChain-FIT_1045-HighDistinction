@@ -33,6 +33,9 @@ export default function Header() {
       </div>
 
       <nav className="hidden md:flex gap-6 items-center text-sm text-slate-200">
+        <Link className="hover:underline" href="/pricing">
+          Pricing
+        </Link>
         <Link className="hover:underline" href="/cert-viewer">
           Cert Viewer
         </Link>

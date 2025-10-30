@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import CertViewer from "@/ui/CertViewer";
-import Skeleton from "react-loading-skeleton";
 
 export default function CertViewerPage() {
   return (

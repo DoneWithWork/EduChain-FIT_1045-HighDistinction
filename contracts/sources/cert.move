@@ -48,7 +48,7 @@ entry fun new_cert(
     let certificate = Certificate {
         id: object::new(ctx),
         student_email,
-        issuer: ctx.sender(),
+        issuer: factory.admin,
         receiver,
         student_name,
         institution_name,
@@ -72,7 +72,7 @@ entry fun new_cert(
 const EInsufficientPermission: u64 = 0;
 
 entry fun revoke_cert(cert: &mut Certificate, revoked_reason: String, ctx: &TxContext) {
-    assert!(ctx.sender() == cert.issuer, EInsufficientPermission);
+    assert!(cert.issuer == ctx.sender(), EInsufficientPermission);
     cert.revoked_reason = revoked_reason;
 
     event::emit(CertificationEvent {

@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/db";
-import { courses, users } from "@/db/schema";
+import { courses, subscription, users } from "@/db/schema";
 import { sessionManager } from "@/lib/auth";
 import { verifyDnsRecord } from "@/lib/extra";
 import { onboardingSchema } from "@/lib/validation";
@@ -61,7 +61,12 @@ export async function CompleteOnboardingAction(prevState: unknown, data: z.infer
             institutionName: isIssuer ? institutionName! : null,
             onBoardingCompleted: 1,
         }).where(eq(users.id, currentUser.id!));
-
+        await db.insert(subscription).values({
+            userId: currentUser.id!,
+            status: "active",
+            currentPeriodEnd: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+            stripeSubscriptionId: "onboarding-free-plan",
+        });
         return { success: true, role: isIssuer ? "issuer" : "student" };
 
     } catch (error) {
