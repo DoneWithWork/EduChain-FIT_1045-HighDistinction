@@ -55,7 +55,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "EduChain",
     description: "EduChain - Empowering Education through Blockchain",
-    images: ["https://edu-chain-fit-1045-high-distinction.vercel.app/logo.png"],
+    images: [
+      "https://edu-chain-fit-1045-high-distinction.vercel.app/EduChain.png",
+    ],
   },
 };
 
