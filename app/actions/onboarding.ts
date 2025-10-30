@@ -65,7 +65,7 @@ export async function CompleteOnboardingAction(prevState: unknown, data: z.infer
             userId: currentUser.id!,
             status: "active",
             currentPeriodEnd: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-            stripeSubscriptionId: "onboarding-free-plan",
+            stripeSubscriptionId: `onboarding-free-plan-${currentUser.id!}`,
         });
         return { success: true, role: isIssuer ? "issuer" : "student" };
 

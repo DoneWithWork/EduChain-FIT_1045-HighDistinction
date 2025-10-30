@@ -121,9 +121,11 @@ function TimeLine({ certs }: { certs: CertsWithCourseAndIssuer[] }) {
               <h3 className="vertical-timeline-element-title text-xl font-bold">
                 {cert.courses.courseName}
               </h3>
-              <Badge className="bg-red-500 text-white font-bold text-sm">
-                {cert.revoked === 1 ? "Revoked" : "Active"}
-              </Badge>
+              {cert.revoked === 1 && (
+                <Badge className="bg-red-500 text-white font-bold text-sm">
+                  Revoked
+                </Badge>
+              )}
             </div>
             <h4 className="vertical-timeline-element-subtitle">
               Issued by:{" "}

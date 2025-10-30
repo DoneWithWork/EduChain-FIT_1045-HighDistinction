@@ -115,7 +115,7 @@ function RevokeAction({ row }: { row: Row<CertColumnsProps> }) {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <span className="text-muted-foreground">No actions available</span>
+        <span className="text-muted-foreground">-</span>
       )}
     </div>
   );
