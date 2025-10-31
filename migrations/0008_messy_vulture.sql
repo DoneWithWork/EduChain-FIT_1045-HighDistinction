@@ -1,0 +1,1 @@
+DROP INDEX `certificates_cert_address_unique`;

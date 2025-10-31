@@ -68,7 +68,7 @@ export const certificates = sqliteTable('certificates', {
         .notNull()
         .references(() => courses.id, { onDelete: 'cascade' }),
     studentEmail: text('student_email').notNull(),
-    certAddress: text('cert_address').unique(),
+    certAddress: text('cert_address'),
     objectId: text('object_id').default(""),
     createdAt: text('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text('updated_at').notNull().default(sql`CURRENT_TIMESTAMP`),

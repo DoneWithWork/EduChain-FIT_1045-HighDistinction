@@ -57,6 +57,13 @@
       "when": 1761817437993,
       "tag": "0007_rapid_lady_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1761897641844,
+      "tag": "0008_messy_vulture",
+      "breakpoints": true
     }
   ]
 }
