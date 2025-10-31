@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import LogoutBtn from "./LogoutBtn";
+import Link from "next/link";
 
 const links = [
   { name: "Courses", href: "/dashboard/issuer" },
@@ -26,12 +27,15 @@ export default function IssuerSidebar() {
 
   return (
     <aside className="h-screen w-64 bg-[#0d1117] flex flex-col justify-between">
-      <div className="p-4 flex items-center justify-between border-b border-gray-800">
+      <Link
+        href={"/"}
+        className="p-4 flex items-center justify-between border-b border-gray-800"
+      >
         <h3 className="text-xl font-semibold text-[#e6edf3]">EduChain</h3>
         <span className="bg-purple-600 text-white font-semibold px-3 py-1 rounded-md text-xs uppercase">
           Issuer
         </span>
-      </div>
+      </Link>
 
       <nav className="flex-1 mt-6 px-4">
         <ul className="space-y-3">

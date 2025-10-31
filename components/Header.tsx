@@ -1,8 +1,18 @@
 "use client";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useEffect, useState } from "react";
+import { getCookie } from "cookies-next/client";
 
 export default function Header() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const session = getCookie("educhain_session_cookie");
+    if (session) {
+      Promise.resolve().then(() => setLoggedIn(true));
+    }
+  }, []);
   return (
     <div className="flex items-center justify-between">
       <Link href={"/"} className="flex items-center gap-4">
@@ -40,12 +50,21 @@ export default function Header() {
           Cert Viewer
         </Link>
 
-        <Button
-          onClick={() => (window.location.href = "/auth")}
-          className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
-        >
-          Get Started
-        </Button>
+        {loggedIn ? (
+          <Button
+            onClick={() => (window.location.href = "/auth")}
+            className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
+          >
+            Get Started
+          </Button>
+        ) : (
+          <Button
+            onClick={() => (window.location.href = "/dashboard")}
+            className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
+          >
+            Dashboard
+          </Button>
+        )}
       </nav>
     </div>
   );
