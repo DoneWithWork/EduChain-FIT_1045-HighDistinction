@@ -1,6 +1,7 @@
 import { db } from '@/db/db';
 import { subscription, users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { updateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
@@ -102,9 +103,9 @@ export async function POST(req: NextRequest) {
                                     await db.insert(subscription).values(values);
 
                                 }
+                                updateTag(`user-account-${user.id}`);
                             } else {
                                 console.log(`User ${user.id} made a one-time purchase with Price ID: ${priceId}`);
-                                // Here you can handle one-time purchases if needed
                             }
                         }
                     } else {
