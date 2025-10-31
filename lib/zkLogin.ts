@@ -187,9 +187,6 @@ class PrivateZkLoginService {
         return payment;
     }
 
-
-
-    // 3) Get salt from your salt service (Enoki salt server) - returns string decimal or base64 depending on endpoint
     async getSaltFromServer(jwt: string): Promise<string | null> {
         try {
             const res = await fetch(this.SALT_ENDPOINT, {
@@ -210,7 +207,6 @@ class PrivateZkLoginService {
             return null;
         }
     }
-
     async getPartialLoginZkSignature({ jwt, extendedEphemeralPublicKey, maxEpoch, randomness }: GetZkProofProps) {
         try {
             const body = {

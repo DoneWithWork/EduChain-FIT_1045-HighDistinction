@@ -47,8 +47,7 @@ class Auth {
         })
         console.log(session);
         if (!session || new Date(session.expiresAt) < new Date()) {
-            await this.destroySession(token);
-            // (await cookies()).delete(this.SESSION_COOKIE_NAME);
+
 
             return null;
         }
