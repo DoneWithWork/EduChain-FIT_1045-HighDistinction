@@ -1,21 +1,30 @@
 "use client";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
-import { getCookie } from "cookies-next/client";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  function doesHttpOnlyCookieExist(cookiename: string) {
+    const d = new Date();
+    d.setTime(d.getTime() + 1000);
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = cookiename + "=new_value;path=/;" + expires;
+    return document.cookie.indexOf(cookiename + "=") == -1;
+  }
 
   useEffect(() => {
-    const session = getCookie("educhain_session_cookie");
-    if (session) {
-      Promise.resolve().then(() => setLoggedIn(true));
-    }
+    const exists = doesHttpOnlyCookieExist("educhain_session_cookie");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (exists) setLoggedIn(true);
+    setLoading(false);
   }, []);
+
   return (
     <div className="flex items-center justify-between">
-      <Link href={"/"} className="flex items-center gap-4">
+      <Link href="/" className="flex items-center gap-4">
         <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur p-2 flex items-center justify-center">
           <svg
             width="28"
@@ -50,19 +59,26 @@ export default function Header() {
           Cert Viewer
         </Link>
 
-        {loggedIn ? (
+        {loading ? (
           <Button
-            onClick={() => (window.location.href = "/auth")}
-            className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
+            disabled
+            className="ml-2 rounded-md bg-white/6 px-4 py-2 text-slate-400 text-sm backdrop-blur cursor-wait"
           >
-            Get Started
+            Checking...
           </Button>
-        ) : (
+        ) : loggedIn ? (
           <Button
             onClick={() => (window.location.href = "/dashboard")}
             className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
           >
             Dashboard
+          </Button>
+        ) : (
+          <Button
+            onClick={() => (window.location.href = "/auth")}
+            className="ml-2 rounded-md cursor-pointer bg-white/6 px-4 py-2 text-slate-100 text-sm backdrop-blur hover:bg-white/10"
+          >
+            Get Started
           </Button>
         )}
       </nav>
